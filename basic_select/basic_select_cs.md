@@ -3,7 +3,7 @@
 ## SQL Basic Select Cheat Sheet
 
 ### Revising the Select Query I
-```{sql eval=FALSE}
+```{sql}
 SELECT *
 FROM CITY
 WHERE population > 100000 
