@@ -3,10 +3,10 @@
 ```sql
 SELECT
 CASE
-    WHEN A+B <= C OR B+C <= A OR A+C <= B THEN 'Not A Triangle'
-    WHEN A=B AND B=C THEN 'Equilateral'
-    WHEN A=B AND A!=C OR B=C AND B!=A OR A=C AND A!=B THEN 'Isosceles'
-    WHEN A!=B AND B!=C THEN 'Scalene'
+    WHEN A+B <= C OR B+C <= A OR A+C <= B THEN 'Not A Triangle' -- If sum of two sides is greater than or equal to the third
+    WHEN A=B AND B=C THEN 'Equilateral' -- If all sides are equal                  
+    WHEN A=B AND A!=C OR B=C AND B!=A OR A=C AND A!=B THEN 'Isosceles' -- If two sides are equal and the third is different
+    WHEN A!=B AND B!=C THEN 'Scalene' -- If no sides are equal
 END
 FROM TRIANGLES;
 ```
