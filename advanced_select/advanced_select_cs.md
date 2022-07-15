@@ -12,17 +12,17 @@ FROM TRIANGLES;
 ```
 ## Occupations
 
+I had no idea with this one. I tried PIVOT and CROSSTAB to no avail. Whilst searching for "Transpose table in MySQL" I found an answer [on stack overflow.](https://stackoverflow.com/questions/71652696/transpose-a-table-in-mysql) accidently and couldn't look away. Why use MAX to wrap CASE WHEN? It's confusing but apparently it turns what would otherwise be diagonal data into vertical data that fits into the columns. Check [this out.](https://stackoverflow.com/questions/71544038/using-max-with-case-when-in-mysql#:~:text=The%20aggregation%20goes%20outside%20%28wraps%20round%29%20the%20CASE,has%20rotated%2090%20degrees%2C%20from%20vertical%20to%20horizontal.)
+
 ```sql
--- I had no idea with this one. Got the answer from Akina on Stack Overflow https://stackoverflow.com/questions/71652696/transpose-a-table-in-mysql
--- I found it accidently whilst search for 'Transpose table in MySQL'
 
 WITH -- Uses a CTE to add row numbers to the original table, partitioned by occupation
 enumerated AS (
     SELECT name, occupation, ROW_NUMBER() OVER (PARTITION BY occupation ORDER BY name) row_numbers
     FROM OCCUPATIONS
 )
-SELECT MAX(CASE WHEN occupation='Doctor'    THEN Name END) AS Doctor,    -- Then make the CASE WHENs enter vertically into one column using MAX 
-       MAX(CASE WHEN occupation='Professor' THEN Name END) AS Professor, -- See an explanation [here](https://stackoverflow.com/questions/71544038/using-max-with-case-when-in-mysql#:~:text=The%20aggregation%20goes%20outside%20%28wraps%20round%29%20the%20CASE,has%20rotated%2090%20degrees%2C%20from%20vertical%20to%20horizontal.)
+SELECT MAX(CASE WHEN occupation='Doctor'    THEN Name END) AS Doctor,    
+       MAX(CASE WHEN occupation='Professor' THEN Name END) AS Professor, 
        MAX(CASE WHEN occupation='Singer'     THEN Name END) AS Actor,     
        MAX(CASE WHEN occupation='Actor'    THEN Name END) AS Singer  
 FROM enumerated
@@ -32,13 +32,13 @@ GROUP BY row_numbers
 
 ## The PADS
 ```sql
-SELECT CONCAT(Name,'(', LEFT(Occupation,1),')')
+SELECT CONCAT(Name,'(', LEFT(Occupation,1),')') -- Using LEFT again to grab the first letter of the occupation and concatenating to name with parentheses
 FROM OCCUPATIONS
-ORDER BY Name;
+ORDER BY Name; -- This first query has the formatting correct for the data to be summarized now.
 
-SELECT CONCAT('There are a total of ', COUNT(*),' ', LOWER(Occupation),'s.')
+SELECT CONCAT('There are a total of ', COUNT(*),' ', LOWER(Occupation),'s.') -- Now we use COUNT to count the number of occupations
 FROM OCCUPATIONS
-GROUP BY OCCUPATION
+GROUP BY OCCUPATION -- And don't forget to group by when using aggregate functions
 ORDER BY COUNT(*) ASC, OCCUPATION ASC;
 ```
 
@@ -46,9 +46,9 @@ ORDER BY COUNT(*) ASC, OCCUPATION ASC;
 ```sql
 SELECT
 CASE 
-    WHEN P IS NULL THEN CONCAT(N,' ','Root')
-    WHEN N NOT IN (SELECT DISTINCT P FROM BST WHERE P IS NOT NULL) THEN CONCAT(N,' ','Leaf')
-    ELSE CONCAT(N,' ','Inner')
+    WHEN P IS NULL THEN CONCAT(N,' ','Root') -- The root with have no parent in the "P" column so that's easy to find
+    WHEN N NOT IN (SELECT DISTINCT P FROM BST WHERE P IS NOT NULL) THEN CONCAT(N,' ','Leaf') -- Leaf nodes won't be found in the parent column!
+    ELSE CONCAT(N,' ','Inner') -- Everything else (most) is thus an inner element
 END
 FROM BST
 ORDER BY N ASC;
@@ -59,25 +59,25 @@ ORDER BY N ASC;
 SELECT
     company_code,
     founder,
-    COUNT(DISTINCT w) AS lmcount,
-    COUNT(DISTINCT x) AS smcount,
-    COUNT(DISTINCT y) AS mcount,
-    COUNT(DISTINCT z) AS ecount
-FROM (
+    COUNT(DISTINCT lm_code) AS lmcount, -- Count the unique values of lead manager codes (there are many duplicates due to the joining below)
+    COUNT(DISTINCT sm_code) AS smcount, -- rinse and repeat
+    COUNT(DISTINCT m_code) AS mcount,
+    COUNT(DISTINCT e_code) AS ecount
+FROM ( -- Perhaps not elegant, but transparent. join all the tables together so all the data is in one place and choose FROM there!
     SELECT 
         c.company_code,
         c.founder,
-        lm.lead_manager_code AS w,
-        sm.senior_manager_code AS x,
-        m.manager_code AS y,
-        e.employee_code AS z
+        lm.lead_manager_code AS lm_code,
+        sm.senior_manager_code AS sm_code,
+        m.manager_code AS m_code,
+        e.employee_code AS e_code
     FROM company AS c
     LEFT JOIN Lead_Manager AS lm ON (c.company_code = lm.company_code)
     LEFT JOIN Senior_Manager AS sm ON (lm.company_code = sm.company_code)
     LEFT JOIN Manager AS m ON (sm.company_code = m.company_code)
     LEFT JOIN Employee AS e ON (m.company_code = e.company_code)
     ) AS subquery
-GROUP BY company_code, founder
+GROUP BY company_code, founder -- group by the two left identifying columns so each copmany and founder has a tally
 ORDER BY company_code;
 ```
 ## Contest Leaderboard
@@ -85,16 +85,17 @@ ORDER BY company_code;
 SELECT
     hacker_id,
     name,
-    SUM(max) AS total_score
-FROM(SELECT
+    SUM(max) AS total_score -- We will add the top scores per hacker and challenge
+FROM(SELECT -- Similar to the subquery in the new company problem; join hackers to submissions
         h.name,
         h.hacker_id,
         s.challenge_id,
-        MAX(score) AS max
+        MAX(score) AS max -- find the max score for each submission
      FROM Hackers AS h
      LEFT JOIN Submissions AS s ON (h.hacker_id = s.hacker_id)
-     GROUP BY h.name, h.hacker_id, s.challenge_id) AS subquery
-GROUP BY hacker_id, name
+     GROUP BY h.name, h.hacker_id, s.challenge_id) AS subquery -- finish the subquery by grouping by hacker name, id, and challege
+                                                               -- this leaves us with all the top scores per hacker, per challenge
+GROUP BY hacker_id, name -- Then we just have to group by hacker_id, and name, the sum of top scores per hacker and challenge is appended
 HAVING SUM(max) > 0
 ORDER BY total_score DESC, hacker_id ASC;
 ```
