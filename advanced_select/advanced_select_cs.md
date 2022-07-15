@@ -13,13 +13,16 @@ FROM TRIANGLES;
 ## Occupations
 
 ```sql
-WITH
+-- I had no idea with this one. Got the answer from Akina on Stack Overflow https://stackoverflow.com/questions/71652696/transpose-a-table-in-mysql
+-- I found it accidently whilst search for 'Transpose table in MySQL'
+
+WITH -- Uses a CTE to add row numbers to the original table, partitioned by occupation
 enumerated AS (
     SELECT name, occupation, ROW_NUMBER() OVER (PARTITION BY occupation ORDER BY name) row_numbers
     FROM OCCUPATIONS
 )
-SELECT MAX(CASE WHEN occupation='Doctor'    THEN Name END) AS Doctor,     
-       MAX(CASE WHEN occupation='Professor' THEN Name END) AS Professor,     
+SELECT MAX(CASE WHEN occupation='Doctor'    THEN Name END) AS Doctor,    -- Then make the CASE WHENs enter vertically into one column using MAX 
+       MAX(CASE WHEN occupation='Professor' THEN Name END) AS Professor, -- See an explanation [here](https://stackoverflow.com/questions/71544038/using-max-with-case-when-in-mysql#:~:text=The%20aggregation%20goes%20outside%20%28wraps%20round%29%20the%20CASE,has%20rotated%2090%20degrees%2C%20from%20vertical%20to%20horizontal.)
        MAX(CASE WHEN occupation='Singer'     THEN Name END) AS Actor,     
        MAX(CASE WHEN occupation='Actor'    THEN Name END) AS Singer  
 FROM enumerated
