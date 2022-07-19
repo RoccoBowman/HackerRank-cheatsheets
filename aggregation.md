@@ -113,3 +113,23 @@ WHERE LAT_N < 137.2345
 ORDER BY LAT_N DESC
 LIMIT 1; -- Using the ol' lop of the top row ploy
 ```
+
+## Weather Observation Station 17
+-Easy
+
+```sql
+SELECT ROUND(LONG_W,4)
+FROM STATION
+WHERE LAT_N > 38.7780
+ORDER BY LAT_N ASC -- Use ASC to choose from the smallest LAT_N
+LIMIT 1;
+```
+
+## Weather Observation Station 18
+-Medium
+
+```sql
+
+```
+
+
