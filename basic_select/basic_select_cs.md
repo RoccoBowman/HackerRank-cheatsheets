@@ -77,7 +77,7 @@ ORDER BY length(CITY) DESC, CITY ASC -- Sort length descending to find largest
 LIMIT 1; -- Limit 1 to find largest in the list
 ```
 
-``sql
+```sql
 SELECT *
 FROM
 (SELECT CITY, length(CITY) len
