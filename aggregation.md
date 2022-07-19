@@ -137,7 +137,18 @@ SELECT
     (SELECT (MAX(LONG_W) - MIN(LONG_W))) AS longdist -- Same from longitude
     FROM STATION) AS sq
 ```
+## Weather Observation Station 19
+-Medium
 
+```sql
+SELECT
+    ROUND(SQRT((latdist*latdist) + (longdist * longdist)),4) as eudist -- Euclidean distance = sqrt((x1-x2)^2 + (y1-y2)^2)
+FROM (
+SELECT
+    (SELECT (MAX(LAT_N) - MIN(LAT_N))) AS latdist, -- This equates to x1-x2
+    (SELECT (MAX(LONG_W) - MIN(LONG_W))) AS longdist -- This equates to y1-y2
+FROM STATION) as sq
+```
 
 
 
