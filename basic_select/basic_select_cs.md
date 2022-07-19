@@ -77,6 +77,22 @@ ORDER BY length(CITY) DESC, CITY ASC -- Sort length descending to find largest
 LIMIT 1; -- Limit 1 to find largest in the list
 ```
 
+``sql
+SELECT *
+FROM
+(SELECT CITY, length(CITY) len
+FROM STATION
+ORDER BY len ASC, CITY ASC
+LIMIT 1) sq
+UNION
+SELECT *
+FROM
+(SELECT CITY, length(CITY) len
+FROM STATION
+ORDER BY len DESC, CITY ASC
+LIMIT 1) sq2 ;
+```
+
 ### Weather Observation Station 6
 ```sql
 SELECT DISTINCT CITY
