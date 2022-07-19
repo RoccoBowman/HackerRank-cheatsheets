@@ -1,7 +1,7 @@
 # Aggregation
 
 ## Revising Aggregations - The Count Function
-## Easy
+-Easy
 
 ```sql
 SELECT COUNT(*)
