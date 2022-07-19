@@ -51,3 +51,23 @@ WHERE COUNTRYCODE = 'JPN';
 SELECT MAX(POPULATION) - MIN(POPULATION)
 FROM CITY;
 ```
+## The Blunder
+-Easy
+
+```sql
+SELECT (CEIL(AVG(Salary) - AVG(REPLACE(Salary, 0, '')))) AS diff
+FROM EMPLOYEES;
+```
+
+## Top Earners
+-Easy
+
+```sql
+SELECT
+    (months * salary) AS total,
+    COUNT(*) AS count
+FROM Employee
+GROUP BY total
+ORDER BY total DESC
+LIMIT 1;
+```
