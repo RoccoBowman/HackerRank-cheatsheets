@@ -129,7 +129,15 @@ LIMIT 1;
 -Medium
 
 ```sql
-
+SELECT
+    ROUND((latdist + longdist),4) as mandist
+FROM (
+SELECT 
+    (SELECT (MAX(LAT_N) - MIN(LAT_N))) AS latdist,
+    (SELECT (MAX(LONG_W) - MIN(LONG_W))) AS longdist
+    FROM STATION) AS sq
 ```
+
+
 
 
