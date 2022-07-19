@@ -130,11 +130,11 @@ LIMIT 1;
 
 ```sql
 SELECT
-    ROUND((latdist + longdist),4) as mandist
+    ROUND((latdist + longdist),4) as mandist -- Manhattan distance is just the difference of X and Y of two points at a right angle
 FROM (
 SELECT 
-    (SELECT (MAX(LAT_N) - MIN(LAT_N))) AS latdist,
-    (SELECT (MAX(LONG_W) - MIN(LONG_W))) AS longdist
+    (SELECT (MAX(LAT_N) - MIN(LAT_N))) AS latdist, -- Calculate the difference between max lat and min lat
+    (SELECT (MAX(LONG_W) - MIN(LONG_W))) AS longdist -- Same from longitude
     FROM STATION) AS sq
 ```
 
