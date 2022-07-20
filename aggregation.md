@@ -152,6 +152,7 @@ FROM STATION) as sq
 
 ## Weather Observation Station 20
 -Medium
+
 It drives me (and probably everyone else) crazy that there is no 'easy' way to find the median of an array. See the explanation for this code [here.](https://sebhastian.com/mysql-median/)
 
 ```sql
