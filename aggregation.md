@@ -150,5 +150,19 @@ SELECT
 FROM STATION) as sq
 ```
 
+## Weather Observation Station 20
+-Medium
+See the explanation for this code [here.](https://sebhastian.com/mysql-median/)
 
+```sql
+SET @row_index := -1;
+SELECT ROUND(AVG(sq.LAT_N),4) as median
+FROM (
+    SELECT @row_index:=@row_index + 1 AS row_index, LAT_N
+    FROM STATION
+    ORDER BY LAT_N
+    ) AS sq
+WHERE sq.row_index 
+  IN (FLOOR(@row_index / 2) , CEIL(@row_index / 2));     
+```
 
