@@ -111,7 +111,7 @@ SELECT ROUND(LONG_W,4)
 FROM STATION
 WHERE LAT_N < 137.2345
 ORDER BY LAT_N DESC
-LIMIT 1; -- Using the ol' lop of the top row ploy
+LIMIT 1; -- Using the ol' lop off the top row ploy
 ```
 
 ## Weather Observation Station 16
@@ -122,7 +122,7 @@ SELECT ROUND(LAT_N,4)
 FROM STATION
 WHERE LAT_N > 38.7780
 ORDER BY LAT_N ASC
-LIMIT 1; -- Using the ol' lop of the top row ploy again
+LIMIT 1; -- Using the ol' lop off the top row ploy again
 ```
 
 ## Weather Observation Station 17
