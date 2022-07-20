@@ -23,8 +23,8 @@ enumerated AS (
 )
 SELECT MAX(CASE WHEN occupation='Doctor'    THEN Name END) AS Doctor,    
        MAX(CASE WHEN occupation='Professor' THEN Name END) AS Professor, 
-       MAX(CASE WHEN occupation='Singer'     THEN Name END) AS Actor,     
-       MAX(CASE WHEN occupation='Actor'    THEN Name END) AS Singer  
+       MAX(CASE WHEN occupation='Singer'    THEN Name END) AS Actor,     
+       MAX(CASE WHEN occupation='Actor'     THEN Name END) AS Singer  
 FROM enumerated
 GROUP BY row_numbers
 ```
