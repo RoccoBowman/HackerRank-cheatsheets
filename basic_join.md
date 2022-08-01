@@ -40,6 +40,8 @@ GROUP BY COUNTRY.CONTINENT;
 
 Julia just finished conducting a coding contest, and she needs your help assembling the leaderboard! Write a query to print the respective hacker_id and name of hackers who achieved full scores for more than one challenge. Order your output in descending order by the total number of challenges in which the hacker earned a full score. If more than one hacker received full scores in same number of challenges, then sort them by ascending hacker_id.
 
+Strategy: Because we need to find the number of full-score challenges per hacker, we will need a GROUP BY in order to aggregate by hacker and make sure their aggregated value is greater than one indicated more than one full score on challenges. To grab the full scores for aggregation, we need to make sure that the submission scores are the same as the full score as outlined in the difficulty table. To compare these columns, we need to first join all the tables together on appropriate join keys.
+
 ```sql
 SELECT h.hacker_id, h.name
 FROM Submissions AS s -- Started with submissions since it is the table with the most info
@@ -55,6 +57,8 @@ ORDER BY COUNT(*) DESC, hacker_id ASC;
 ## Ollivander's Inventory
 [Medium]
 Write a query to print the id, age, coins_needed, and power of the wands that Ron's interested in, sorted in order of descending power. If more than one wand has same power, sort the result in order of descending age.
+
+Strategy: We first need to find the cheapest wands with the same age and power and compare that to the entire stock; in this case, we need a subquery in the conditional WHERE clause to specify which is the cheapest. Because of the subquery's location in the WHERE clause, only one column can be returned using MIN() here. We have to join the tables to match up the age and power based on code but then condition that power in this joined table must be the same as that in the original joined data--same for age. This almost mirrors a GROUP BY statement and aggregates the cheapest cost to the same power and ages. All that is left is the join the original data and specify the columns and order.
 
 ```sql
 SELECT
@@ -73,7 +77,10 @@ ORDER BY w.power DESC, wp.age DESC;
 ```
 
 ## Contest Leaderboard
--Medium
+[Medium]
+The total score of a hacker is the sum of their maximum scores for all of the challenges. Write a query to print the hacker_id, name, and total score of the hackers ordered by the descending score. If more than one hacker achieved the same total score, then sort the result by ascending hacker_id. Exclude all hackers with a total score of 0 from your result.
+
+Strategy: This problem is another one that relies on aggregation, so first we need to think about how to aggregate maximum scores for each hacker's challenges. We use a subquery in the FROM clause as we only want to sum the maximum scores (one column) from the subquery). The subquery groups hackers by id and name, as well as the unique challenges and selects the maximum score per hacker and challenge. All that is left is to select from this subquery the sum of maximum score and groupb by hacker where the sum score is not zero!
 
 ```sql
 SELECT
