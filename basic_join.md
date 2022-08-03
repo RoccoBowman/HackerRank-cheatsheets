@@ -126,3 +126,44 @@ SELECT
 FROM Students
 ORDER BY Grade DESC, Name ASC;
 ```
+## Challenges
+[Medium]
+Julia asked her students to create some coding challenges. Write a query to print the hacker_id, name, and the total number of challenges created by each student. Sort your results by the total number of challenges in descending order. If more than one student created the same number of challenges, then sort the result by hacker_id. If more than one student created the same number of challenges and the count is less than the maximum number of challenges created, then exclude those students from the result.
+
+Strategy: Like Ollivander's Inventory, we need to place subqueries in the WHERE or, in this case, HAVING clause because we are ultimately comparing and filtering with aggregated tables. First we need to find the count of challenges per hacker in the first subquery and extract only the unique values for completed challenges so that we do not have duplicates (though still including the maximum ones which we want to keep). The second subquery creates another condition where if the challenge count is the maximum (50) then keep it.
+
+```sql
+SELECT 
+    h.hacker_id, 
+    h.name, 
+    COUNT(c.challenge_id) AS challenge_counter
+FROM hackers h
+JOIN challenges c
+    ON h.hacker_id = c.hacker_id
+GROUP BY h.hacker_id, h.name
+
+HAVING challenge_counter IN (
+    SELECT sq1.counter
+    FROM(
+        SELECT hacker_id, COUNT(challenge_id) AS counter 
+        FROM challenges
+        GROUP BY hacker_id
+        ORDER BY counter DESC
+    ) AS sq1
+    GROUP BY sq1.counter 
+    HAVING COUNT(sq1.counter) = 1
+)
+
+OR
+
+challenge_counter = (
+    SELECT MAX(sq2.counter)
+    FROM(
+        SELECT hacker_id, COUNT(challenge_id) AS counter
+        FROM challenges
+        GROUP BY hacker_id
+        ORDER BY counter DESC
+    ) AS sq2)
+
+ORDER BY challenge_counter DESC, h.hacker_id ASC;
+```
