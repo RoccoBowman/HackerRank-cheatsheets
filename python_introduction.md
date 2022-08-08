@@ -59,3 +59,24 @@ if __name__ == '__main__':
     for i in range(0,n,1): #Use n here, as Python ranges are non-inclusive (if n = 5, will stop at 4)
         print(i**2)
 ```
+
+## Write a function
+[Medium]
+
+```python
+def is_leap(year):
+    leap = False
+    
+    if (year % 400) == 0 and (year % 100) == 0: # If the year is divisible by 400 and 100, it is a leap year
+        leap = True
+    elif (year % 400) == 0 and (year % 100) > 0: # If the year is divisible by 400 but not 100, it is not a leap year
+        leap = False
+    elif (year % 4) == 0 and (year % 100) == 0: # If the year is divisble by 4 AND 100, it is not a leap year
+        leap = False
+    elif (year % 4) == 0 and (year % 100) > 0: # If the year is divisible by 4 but not 100, it is a leap year
+        leap = True
+    return leap
+
+year = int(input())
+print(is_leap(year))
+```
