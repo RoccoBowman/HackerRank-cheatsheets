@@ -53,9 +53,9 @@ if __name__ == '__main__':
 
 ## Loops
 
-```
+```python
 if __name__ == '__main__':
     n = int(input())
-    for i in range(0,n,1): # Use n here, as Python ranges are non-inclusive (if n = 5, will stop at 4)
+    for i in range(0,n,1): #Use n here, as Python ranges are non-inclusive (if n = 5, will stop at 4)
         print(i**2)
 ```
