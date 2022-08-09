@@ -80,3 +80,14 @@ def is_leap(year):
 year = int(input())
 print(is_leap(year))
 ```
+## Print Function
+[Easy]
+
+Strategy: I couldn't figure this one out on my own because I could only do it with string functions or on multiple lines. However, it turns out that the print function in Python has an "end" parameter. This parameter defaults to "\n" or a line return, but if "end" is set to '' or an empty character, the following numbers will print on the same line!
+
+```python
+if __name__ == '__main__':
+    n = int(input())
+    for i in range(1,n+1,1):
+        print(i, end='')
+```
