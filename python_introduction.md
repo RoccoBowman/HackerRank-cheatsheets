@@ -91,3 +91,18 @@ if __name__ == '__main__':
     for i in range(1,n+1,1):
         print(i, end='')
 ```
+## Alphabet Rangoli
+
+```python
+alphabet = list(map(chr, range(97, 123)))
+
+def print_rangoli(n):
+    all_lines=[] # Create an empty set that will store each line created in each iteration in the for loop below
+    for i in range(n):
+            line_i = "-".join(alphabet[i:n]) # For each iteration, creates a string that contains letters and dash seperators (if n = 3, then i=1 would be a-b-c, i=2 would be a-b ...)
+            all_lines.append((line_i[::-1] + line_i[1:]).center(4 * n - 3, "-")) # appends the last letter in the string in the center of a new string, where the length is determined by (4*n-3) and the fill character parameter ('-') when no other characters are specified
+
+    print('\n'.join(all_lines[:0:-1]+all_lines)) # Print a space for each line and print successive lines 
+            
+print_rangoli(5)
+```
